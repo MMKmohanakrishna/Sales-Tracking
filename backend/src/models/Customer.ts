@@ -5,6 +5,7 @@ export interface ICustomer extends Document {
   name: string;
   phone?: string;
   address?: string;
+  mapLink?: string;
   notes?: string;
   totalPurchased: number;
   totalPaid: number;
@@ -19,6 +20,9 @@ const customerSchema = new Schema<ICustomer>(
     name: { type: String, required: true, trim: true },
     phone: { type: String, trim: true, default: "" },
     address: { type: String, trim: true, default: "" },
+    // A pasted Google Maps (or any map) link — optional, so the owner can
+    // find a customer's location later without having to remember it.
+    mapLink: { type: String, trim: true, default: "" },
     notes: { type: String, trim: true, default: "" },
     // Denormalized totals for fast reads. These are NEVER incremented blindly —
     // they are recomputed from Sale/Payment documents (the source of truth)

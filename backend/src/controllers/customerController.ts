@@ -21,6 +21,13 @@ const customerSchema = z.object({
       message: "Enter a valid 10-digit Indian phone number",
     }),
   address: z.string().trim().optional(),
+  mapLink: z
+    .string()
+    .trim()
+    .optional()
+    .refine((v) => !v || /^https?:\/\//i.test(v), {
+      message: "Map link must start with http:// or https://",
+    }),
   notes: z.string().trim().optional(),
 });
 

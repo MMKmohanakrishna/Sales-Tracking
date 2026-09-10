@@ -51,6 +51,7 @@ export interface CustomerInput {
   name: string;
   phone?: string;
   address?: string;
+  mapLink?: string;
   notes?: string;
 }
 

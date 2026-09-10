@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useParams } from "next/navigation";
-import { Phone, MapPin, StickyNote, CreditCard, Share2, Check } from "lucide-react";
+import { Phone, MapPin, StickyNote, CreditCard, Share2, Check, Pencil } from "lucide-react";
 import { useCustomer, useCustomerSales, useCustomerPayments } from "@/hooks/useCustomers";
 import { useSettings } from "@/hooks/useSettings";
 import { LoadingState } from "@/components/shared/LoadingState";
@@ -11,6 +11,7 @@ import { StatusBadge } from "@/components/shared/StatusBadge";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { RecordPaymentModal } from "@/components/shared/RecordPaymentModal";
+import { AddCustomerModal } from "@/components/shared/AddCustomerModal";
 import { CustomerStatementCard } from "@/components/shared/CustomerStatementCard";
 import { formatMoney, formatDate, cn } from "@/lib/utils";
 import { buildCustomerStatement, shareElementAsImage } from "@/lib/share";
@@ -22,6 +23,7 @@ export default function CustomerDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const [tab, setTab] = useState<Tab>("purchases");
   const [payOpen, setPayOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [shareFeedback, setShareFeedback] = useState("");
   const [sharing, setSharing] = useState(false);
   const statementRef = useRef<HTMLDivElement>(null);
@@ -76,6 +78,16 @@ export default function CustomerDetailsPage() {
                   <MapPin className="h-3.5 w-3.5" /> {customer.address}
                 </span>
               )}
+              {customer.mapLink && (
+                <a
+                  href={customer.mapLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-primary font-semibold hover:underline"
+                >
+                  <MapPin className="h-3.5 w-3.5" /> View on Map
+                </a>
+              )}
               {customer.notes && (
                 <span className="flex items-center gap-1">
                   <StickyNote className="h-3.5 w-3.5" /> {customer.notes}
@@ -84,6 +96,9 @@ export default function CustomerDetailsPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setEditOpen(true)}>
+              <Pencil className="h-5 w-5" /> Edit
+            </Button>
             <Button variant="outline" onClick={handleShare} loading={sharing}>
               <Share2 className="h-5 w-5" /> {sharing ? "Preparing..." : "Share"}
             </Button>
@@ -207,6 +222,8 @@ export default function CustomerDetailsPage() {
       )}
 
       <RecordPaymentModal open={payOpen} onClose={() => setPayOpen(false)} customer={customer} />
+
+      <AddCustomerModal open={editOpen} onClose={() => setEditOpen(false)} customer={customer} />
 
       {/* Rendered off-screen — captured to an image when Share is clicked */}
       <div className="fixed -left-[9999px] top-0" aria-hidden="true">

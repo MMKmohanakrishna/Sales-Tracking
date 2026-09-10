@@ -34,6 +34,13 @@ export function CustomerFormFields({
         error={errors.address?.message}
         {...register("address")}
       />
+      <Input
+        label="Map Link"
+        placeholder="Paste a Google Maps link"
+        hint="Optional — open Google Maps, find the location, tap Share, and paste the link here"
+        error={errors.mapLink?.message}
+        {...register("mapLink")}
+      />
       <Textarea
         label="Notes"
         placeholder="Regular customer"
